@@ -1,0 +1,268 @@
+*{
+    font-family: 'Lexend Zetta', sans-serif;
+}
+
+body{
+    background-color: #1a1a1a;
+}
+
+header{
+    background-color: #232323;
+}
+
+.header__container{
+    padding: 0;
+    margin: 0;
+}
+
+.header__menu{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    padding: 10px;
+    padding-left: 20px;
+}
+
+.header__menu_title{
+    user-select: none;  
+    color: white;
+    cursor: pointer;
+}
+
+.header__menu_search{
+    width: 500px;
+    border-radius: 10px;
+    border-style: none;
+    padding: 2px 10px;
+}
+
+.user-name{
+    margin-right: 10px;
+    font-size: 20px;
+    color: white;
+    vertical-align: middle;
+}
+
+.header__menu_signin, 
+.header__menu_register,
+.header__menu_logout a{
+    color: rgba(191, 150, 70, 1);
+    text-decoration: none;
+}
+
+.header__menu_signin{
+    margin-right: 10px;
+}
+
+.form-control{
+    margin-bottom: 15px;
+}
+
+.form-wrapper{
+    max-width: 500px;
+    margin: 0 auto;
+    margin-top: 100px;
+}
+
+
+.form-title{
+    font-size: 33px;
+    color: wheat;
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+.not-hidden{
+    display: block;
+}
+
+.msg_error{
+    border: 2px solid red;
+    border-radius: 3px;
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.wrapper__topVideo{
+    margin-top: 20px;
+}
+
+.title__topVideo{
+    font-size: 45px;
+    margin-left: 10px;
+}
+
+.sort__topVideo{
+    margin-top: 25px;
+}
+
+.btn-serials,
+.btn-films{
+    text-decoration: none;
+    color: rgba(191, 150, 70, 1);
+    font-size: 18px;
+    border: 1px solid #27302b;
+    border-radius: 10%;
+    padding: 2px 15px;
+    margin-left: 10px;
+}
+
+.btn-serials:hover,
+.btn-films:hover{
+    color: rgba(191, 150, 70, 1);
+    background: #222222;
+}
+
+.addVideo{
+    display: none;
+}
+
+.title__addVideo{
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
+    color: rgba(191, 150, 70, 1);
+}
+
+.rating-area{
+    margin-top: 20px;
+}
+
+.wrapper__rating-area {
+	overflow: hidden;
+    width: 210px;
+}
+.wrapper__rating-area:not(:checked) > input {
+	display: none;
+}
+.wrapper__rating-area:not(:checked) > label {
+	float: right;
+	width: 42px;
+	padding: 0;
+	cursor: pointer;
+	font-size: 22px;
+	line-height: 32px;
+	color: lightgrey;
+	text-shadow: 1px 1px #bbb;
+}
+.wrapper__rating-area:not(:checked) > label:before {
+	content: '★';
+}
+.wrapper__rating-area > input:checked ~ label {
+	color: gold;
+	text-shadow: 1px 1px #c60;
+}
+.wrapper__rating-area:not(:checked) > label:hover,
+.wrapper__rating-area:not(:checked) > label:hover ~ label {
+	color: gold;
+}
+.wrapper__rating-area > input:checked + label:hover,
+.wrapper__rating-area > input:checked + label:hover ~ label,
+.wrapper__rating-area > input:checked ~ label:hover,
+.wrapper__rating-area > input:checked ~ label:hover ~ label,
+.wrapper__rating-area > label:hover ~ input:checked ~ label {
+	color: gold;
+	text-shadow: 1px 1px goldenrod;
+}
+.rate-area > label:active {
+	position: relative;
+}
+
+.form__title{
+    margin-top: 50px;
+    color: rgba(191, 150, 70, .6);
+    margin-bottom: 20px;
+}
+
+#imageVideo{
+    width: 290px;
+    color: rgba(191, 150, 70, 1);
+}
+
+.error{
+    margin-top: 10px;
+    color: red;
+}
+
+.genere-dropdown{
+    margin-top: 5px;
+}
+
+.btn-genere{
+    color: rgba(191, 150, 70, 1);
+    min-width: 200px;
+    background-color: rgba(108, 117, 125, .37);
+}
+
+.nameGenere{
+    color: white;
+    font-size: 20px;
+    margin-top: 20px;
+}
+
+.wrapper__form{
+    display: flex;
+    justify-content: space-between;
+}
+
+.wrapper__addVideo{
+    margin-bottom: 30px;
+}
+
+.wrapper__form__btn{
+    display: flex;
+    margin-top: 60px;
+}
+
+.btn-preview{
+    margin-left: 35px;
+}
+
+.wrapper__form__preview{
+    margin-right: 50px;
+    text-align: center;
+}
+
+#form__imgPreview{
+    max-width: 320px;
+    max-height: 530px;
+    min-width: 300px;
+    min-height: 450px;
+    margin-top: 20px;
+}
+
+#preview__nameVideo{
+    color: white;
+    font-size: 45px;
+}
+
+#preview__rateVideo{
+    color: white;
+    font-size: 35px;
+    font-weight: 600;
+    background: #f2b800;
+    padding: 1px 10px;
+    font-family: open sans,sans-serif;
+    border-radius: 5px;
+    margin-right: 25px;
+    margin-left: 12px;
+}
+
+.rating-star{
+    font-size: 35px !important;
+    color: #f2b800;
+}
+
+#preview__genereVideo{
+    color: white;
+    font-size: 30px;
+}
+
+/* MEDIA */
+/* @media (min-width:1200px){
+    .container{
+        max-width: 100%;
+    }
+} */
