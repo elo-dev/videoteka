@@ -28,55 +28,158 @@ const blockAddVideo = document.querySelector('.addVideo');
 const blockTopVideo = document.querySelector('.topVideo');
 
 btnAddVideo.addEventListener('click', function(){
-  blockAddVideo.hidden = false;
-  blockTopVideo.hidden = true;
+  if(blockAddVideo.hasAttribute('hidden')){
+    blockAddVideo.removeAttribute('hidden');
+    blockTopVideo.setAttribute('hidden', false);
+  } else {
+    blockAddVideo.setAttribute('hidden', false);
+    blockTopVideo.removeAttribute('hidden');
+  }
 });
 
 const addVideo = document.querySelector('.btn-success-form');
+// Счетчик ID добавление в массив
+let id = 0;
 
 addVideo.addEventListener('click', function(event){
   event.preventDefault();
-  var nameVideo = document.querySelector('.nameVideo').value;
+  var nameVideo = document.querySelector('.nameVideo');
 
   var input = document.querySelector('#imageVideo');
   var error = document.querySelector('.error');
+  var success = document.querySelector('.success');
   var curFile = input.files;
 
-  if(nameVideo.length === 0){
+  var btnGenere = document.querySelector('.btn-genere');
+
+  // Создание блока с ошибками, если одно из полей не заполнено
+  if(!nameVideo.value){
+    nameVideo.style.border = "2px solid red";
     var errName = document.createElement('p');
     errName.textContent = 'Название не выбрано';
     error.appendChild(errName);
   }
-  
-  if(curFile.length === 0){
+  if(!checkbox){
+    var errRate = document.createElement('p');
+    errRate.textContent = 'Рейтинг не указан';
+    error.appendChild(errRate);
+  }
+  if(!genere){
+    btnGenere.style.border = "2px solid red";
+    var errGenere = document.createElement('p');
+    errGenere.textContent = 'Жанр не выбран';
+    error.appendChild(errGenere);
+  }
+  if(curFile.length == 0){
     var errFile = document.createElement('p');
     errFile.textContent = 'Файл для загрузки не выбран';
     error.appendChild(errFile);
   }
 
-  var cardWrapper = document.querySelector('.cardVideo-row');
+  var blockSerials = document.querySelector('#serials');
+  var blockFilms = document.querySelector('#films');
 
-  console.log(cardWrapper);
-  
-  const videoCard = `
-  <div class="col mb-4">
-    <div class="card">
-      <img src="${url}" class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">${nameVideo}</h5>
-        <div class="wrapper__footer-card">
-          <span class="fa fa-star rating-star"></span>
-          <span class="card-rate">${checkbox}</span>
-          <span class="card-genere">${genere}</span>
+  var resetCheckboxInput = document.querySelectorAll('[name="rating"]');
+
+  // Сброс input Checkbox
+  resetCheckboxInput.forEach(e =>{
+    e.checked = false;
+  })  
+
+  // Создание Массива из объектов  
+  const card = [];
+    if(document.onclick = addVideo){
+    id++;
+    card.push({
+          "id" : id,
+          "img" : url,
+          "title" : nameVideo.value,
+          "genere" : genere,
+          "rate" : checkbox,
+          "sort" : sortCheck
+    });
+  }
+
+  // Создание Класса , который рендерит карточку и отображает карточку на странице
+  class Card {
+    render(){
+      let htmlCard = '';
+      card.forEach(({id, img, title, genere, rate, sort}) => {
+        htmlCard += `
+        <div class="col mb-4">
+        <div class="card">
+          <img src="${img}" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">${title}</h5>
+            <div class="wrapper__footer-card">
+              <span class="fa fa-star rating-star"></span>
+              <span class="card-rate">${rate}</span>
+              <span class="card-genere">${genere}</span>
+              <span class="card-sort">${sort}</span>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-  `;
-
-  cardWrapper.insertAdjacentHTML('beforeend', videoCard);
+        `;
+      });
+      // Валидация полей
+      if(typeof url !== 'undefined' && sortCheckAttr == 'films' && nameVideo.value && checkbox && genere && curFile.length > 0){
+        blockFilms.insertAdjacentHTML('beforeend', htmlCard);
+        nameVideo.value = '';
+        genere = '';
+        blockNameGenere.textContent = '';
+        var successBlock = document.createElement('p');
+        successBlock.textContent = 'Карточка добавлена';
+        success.appendChild(successBlock);
+      } else if(typeof url !== 'undefined' && sortCheckAttr == 'serials' && nameVideo.value && checkbox && genere && curFile.length > 0){
+        blockSerials.insertAdjacentHTML('beforeend', htmlCard);
+        nameVideo.value = '';
+        genere = '';
+        blockNameGenere.textContent = '';
+        var successBlock = document.createElement('p');
+        successBlock.textContent = 'Карточка добавлена';
+        success.appendChild(successBlock);
+      }
+    }
+  }
+  // Создание экземпляра 
+  const cardPage = new Card();
+  // Вызов функции render() экземпляра
+  cardPage.render();
 })
 
+// Изменение стилей у выбранного направления (Сериал/Фильм) 
+var sortList = document.querySelectorAll('.form__sort-btn');
+var sortBtnSerials = document.querySelector('.form__sort-btn-serials');
+var sortBtnFilms = document.querySelector('.form__sort-btn-films');
+
+sortList.forEach(e =>{
+  e.onclick = function(event){
+    var sortListAttr = event.target.getAttribute('data-sort');
+    if(sortListAttr === 'films'){
+      sortBtnFilms.classList.add('active');
+      sortBtnSerials.classList.remove('active');
+    } else if(sortListAttr === 'serials'){
+      sortBtnSerials.classList.add('active');
+      sortBtnFilms.classList.remove('active');
+    }
+  }
+})
+
+// Выбор направления (Сериал/Фильм)
+const sort = document.querySelectorAll('.form__sort');
+var sortCheck;
+var sortCheckAttr;
+
+sort.forEach(e => {
+  e.onclick = function(event){
+    event.preventDefault();
+    sortCheck = event.target.textContent;
+    sortCheckAttr = event.target.getAttribute('data-sort');
+  }
+});
+
+// Выбор рейтинга
 var rateCheckbox = document.querySelectorAll('[type="radio"]');
 var checkbox;
 
@@ -86,10 +189,11 @@ var checkbox;
     }
   })
 
+ // Выбор жанра
   var listGenere = document.querySelectorAll('.dropdown-menu>.dropdown-item');
   var genere;
   var blockNameGenere = document.querySelector('.wrapper__nameGenere');
-  
+
   listGenere.forEach(e =>{
     e.onclick = function(event){
       genere = event.target.textContent;
@@ -103,7 +207,9 @@ var checkbox;
     }
   });
 
+  // Получение и отображение изображения в предпоказе
   var blockPreview = document.querySelector('.wrapper__form__preview');
+  // URL изображения
   var url;
 
   document.getElementById("imageVideo").addEventListener('change',function (e){
@@ -117,8 +223,8 @@ var checkbox;
     }
   })
 
-
-document.querySelector('.btn-preview').addEventListener('click', function(e){
+  // Создание предпоказа карточки
+  document.querySelector('.btn-preview').addEventListener('click', function(e){
   e.preventDefault();
   var nameVideo = document.querySelector('.nameVideo').value;
   var error = document.querySelector('.error');

@@ -98,21 +98,49 @@ header{
     margin-top: 25px;
 }
 
+.sort__btn-serials,
+.sort__btn-films,
 .btn-serials,
 .btn-films{
+    background-color: rgba(108, 117, 125, .37);
     text-decoration: none;
     color: rgba(191, 150, 70, 1);
     font-size: 18px;
     border: 1px solid #27302b;
     border-radius: 10%;
     padding: 2px 15px;
-    margin-left: 10px;
 }
 
+.success{
+    color: green;
+}
+
+.form__btn-serials,
+.form__btn-films{
+    margin-left: 0;
+}
+
+.sort__btn-serials:not(:hover),
+.sort__btn-films:not(:hover),
+.btn-serials:not(:hover),
+.btn-films:not(:hover){
+    transition: .25s;
+    background-color: rgba(108, 117, 125, .37);
+    color: rgba(191, 150, 70, 1);
+}
+
+.sort__btn-serials:hover,
+.sort__btn-films:hover,
 .btn-serials:hover,
 .btn-films:hover{
-    color: rgba(191, 150, 70, 1);
-    background: #222222;
+    transition: .25s;
+    color: #fff;
+    background-color: #6c757d;
+}
+
+.active{
+    color: #fff !important;
+    background-color: #6c767d !important;
 }
 
 .title__addVideo{
@@ -196,6 +224,10 @@ header{
     color: white;
     font-size: 20px;
     margin-top: 20px;
+}
+
+.form__sort{
+    margin-top: 50px;
 }
 
 .wrapper__form{
