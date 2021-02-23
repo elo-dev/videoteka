@@ -315,6 +315,22 @@ header{
     margin-top: 35px;
 }
 
+.card__delete{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.fa-trash{
+    cursor: pointer;
+    font-size: 40px !important;
+    margin-right: 10px;
+}
+
+.fa-trash:hover{
+    color: rgba(191, 150, 70, 1);
+    transition: .2s;
+}
+
 /* MEDIA */
 /* @media (min-width:1200px){
     .container{
