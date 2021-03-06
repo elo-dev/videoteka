@@ -4,12 +4,12 @@ const modal = document.querySelector(".modal");
 const openLogIn = document.querySelector(".header__menu_signin");
 const loginInput = document.querySelector("#login");
 const passInput = document.querySelector("#pass");
-var blockSerials = document.querySelector("#serials");
-var blockFilms = document.querySelector("#films");
+const blockSerials = document.querySelector("#serials");
+const blockFilms = document.querySelector("#films");
 
 function render(id, img, title, rate, genere, sort) {
   let htmlCard = `
-        <div class="col mb-4 card-${id}">
+        <div id="card-${id}" class="col mb-4 cardVideo">
         <div class="card">
           <img src="${img}" class="card-img-top" alt="...">
           <div class="card-body">
@@ -22,47 +22,58 @@ function render(id, img, title, rate, genere, sort) {
             </div>
           </div>
           <div class="card__delete">
-            <i class="fa fa-trash" aria-hidden="true"></i>
+            <i class="fa fa-trash trash" aria-hidden="true" onClick="deleteCard(${id})"></i>
           </div>
         </div>
       </div>
       `;
-  if (sort === "Сериалы") {
+  if (img !== '' && title && rate && genere && sort === "Сериалы") {
     blockSerials.innerHTML += htmlCard;
-  } else if (sort === "Фильмы") {
+  } else if (img !== '' && title && rate && genere && sort === "Фильмы") {
     blockFilms.innerHTML += htmlCard;
   }
 }
-//   function valideData(){
-//   if(typeof url !== 'undefined' && sortCheckAttr == 'films' && nameVideo.value && checkbox && genere && curFile.length > 0){
-//     // const data = JSON.parse(localStorage.getItem('card') || []);
-//     blockFilms.insertAdjacentHTML('beforeend', htmlCard);
-//     nameVideo.value = '';
-//     genere = '';
-//     blockNameGenere.textContent = '';
-//     var successBlock = document.createElement('p');
-//     successBlock.textContent = 'Карточка добавлена';
-//     success.appendChild(successBlock);
-//   } else if(typeof url !== 'undefined' && sortCheckAttr == 'serials' && nameVideo.value && checkbox && genere && curFile.length > 0){
-//     // const data = JSON.parse(localStorage.getItem('card') || []);
-//     blockSerials.insertAdjacentHTML('beforeend', htmlCard);
-//     nameVideo.value = '';
-//     genere = '';
-//     blockNameGenere.textContent = '';
-//     var successBlock = document.createElement('p');
-//     successBlock.textContent = 'Карточка добавлена';
-//     success.appendChild(successBlock);
-//   }
-// }
+
+  function resetData(){
+    var curFile = inputImage.files;
+    var success = document.querySelector(".success");
+    var resetCheckboxInput = document.querySelectorAll('[name="rating"]');
+    if(typeof img.src !== 'undefined' && sortCheckAttr == 'films' || sortCheckAttr == 'serials' && nameVideo.value && checkbox && genere && curFile.length > 0){
+      nameVideo.value = '';
+      genere = '';
+      blockNameGenere.textContent = '';
+      var successBlock = document.createElement('p');
+      successBlock.textContent = 'Карточка добавлена';
+      success.appendChild(successBlock);
+    } 
+    // Сброс input Checkbox
+    resetCheckboxInput.forEach((e) => {
+      e.checked = false;
+    });
+  }
 
 let dataParse = JSON.parse(localStorage.getItem("card"));
-
+let id = 0;
 if (dataParse) {
   dataParse.forEach((el) => {
     render(el.id, el.img, el.title, el.rate, el.genere, el.sort);
+    id = el.id;
   });
 } else {
   localStorage.setItem("card", JSON.stringify([]));
+}
+
+let deleteCard = (id) =>{
+  let dataParse = JSON.parse(localStorage.getItem("card"));
+  let cardVideoRow = document.querySelector('.cardVideo-row');
+  let cardVideo = document.getElementById(`card-${id}`);
+      cardVideoRow.removeChild(cardVideo);
+      for(let index = 0; index < dataParse.length; index++){;
+        if(dataParse[index].id === id){
+          dataParse.splice(index, 1);
+        }
+      }
+      localStorage.setItem("card", JSON.stringify(dataParse));
 }
 
 function handleModalOpen() {
@@ -99,19 +110,10 @@ btnAddVideo.addEventListener("click", function () {
   }
 });
 
-const addVideo = document.querySelector(".btn-success-form");
-// Счетчик ID добавление в массив
-let id = 0;
-
-addVideo.addEventListener("click", function (event) {
-  event.preventDefault();
-  var nameVideo = document.querySelector(".nameVideo");
-
-  var input = document.querySelector("#imageVideo");
-  var error = document.querySelector(".error");
+function validVoidInput(){
+  var curFile = inputImage.files;
   var success = document.querySelector(".success");
-  var curFile = input.files;
-
+  var error = document.querySelector(".error");
   var btnGenere = document.querySelector(".btn-genere");
 
   // Создание блока с ошибками, если одно из полей не заполнено
@@ -137,20 +139,24 @@ addVideo.addEventListener("click", function (event) {
     errFile.textContent = "Файл для загрузки не выбран";
     error.appendChild(errFile);
   }
+}
 
-  var resetCheckboxInput = document.querySelectorAll('[name="rating"]');
+const addVideo = document.querySelector(".btn-success-form");
+var nameVideo = document.querySelector(".nameVideo");
+var success = document.querySelector(".success");
+var error = document.querySelector(".error");
 
-  // Сброс input Checkbox
-  resetCheckboxInput.forEach((e) => {
-    e.checked = false;
-  });
+addVideo.addEventListener("click", function (event) {
+  event.preventDefault();
+
+  validVoidInput();
 
   let data = JSON.parse(localStorage.getItem("card"));
-  if((document.onclick = addVideo)){
+  if(nameVideo.value && checkbox && genere && sortCheck && img.src && (document.onclick = addVideo)){
     id++;
     data.push({
       id: id,
-      img: url,
+      img: img.src,
       title: nameVideo.value,
       genere: genere,
       rate: checkbox,
@@ -158,7 +164,18 @@ addVideo.addEventListener("click", function (event) {
     });
   }
   localStorage.setItem("card", JSON.stringify(data));
-  render(id, url, nameVideo.value, genere, checkbox, sortCheck);
+
+  render(id, img.src, nameVideo.value, genere, checkbox, sortCheck);
+  resetData();
+  if(success.childElementCount !== 0){
+    while (error.firstChild) {
+      error.removeChild(error.firstChild);
+    }
+  } else if(error.childElementCount !== 0){
+    while (success.firstChild) {
+      success.removeChild(success.firstChild);
+    }
+  }
 });
 
 // Изменение стилей у выбранного направления (Сериал/Фильм)
@@ -178,6 +195,17 @@ sortList.forEach((e) => {
     }
   };
 });
+
+let inputImage = document.querySelector('input[type="file"]');
+const img = new Image();
+
+inputImage.addEventListener('change', function(e){
+  const reader = new FileReader();
+  reader.onload = function(){
+    img.src = reader.result;
+  }
+  reader.readAsDataURL(inputImage.files[0]);
+}, false)
 
 // Выбор направления (Сериал/Фильм)
 const sort = document.querySelectorAll(".form__sort");
@@ -219,21 +247,22 @@ listGenere.forEach((e) => {
   };
 });
 
-// Получение и отображение изображения в предпоказе
-var blockPreview = document.querySelector(".wrapper__form__preview");
-// URL изображения
-var url;
+// // Получение и отображение изображения в предпоказе
+// var blockPreview = document.querySelector(".wrapper__form__preview");
+// // URL изображения
+// var url;
 
-document.getElementById("imageVideo").addEventListener("change", function (e) {
-  url = window.URL.createObjectURL(e.target.files[0]);
-  var img = document.createElement("img");
-  img.id = "form__imgPreview";
-  blockPreview.insertAdjacentElement("beforeend", img);
-  img.src = url;
-  if (blockPreview.childElementCount > 1) {
-    blockPreview.firstChild.remove();
-  }
-});
+// document.getElementById("imageVideo").addEventListener("change", function (e) {
+//   url = window.URL.createObjectURL(e.target.files[0]);
+//   var img = document.createElement("img");
+//   img.id = "form__imgPreview";
+//   blockPreview.insertAdjacentElement("beforeend", img);
+//   img.src = url;
+//   console.log(img);
+//   if (blockPreview.childElementCount > 1) {
+//     blockPreview.firstChild.remove();
+//   }
+// });
 
 // Создание предпоказа карточки
 document.querySelector(".btn-preview").addEventListener("click", function (e) {
@@ -282,36 +311,3 @@ document.querySelector(".btn-preview").addEventListener("click", function (e) {
     error.appendChild(errPreview);
   }
 });
-
-// class LocalStorageCard {
-//   constructor(){
-//     this.keyName = 'serials';
-//   }
-
-//   getCard(){
-//     const cardLocalStorage = localStorage.getItem(this.keyName);
-//     if(cardLocalStorage !== null){
-//       return JSON.parse(cardLocalStorage);
-//     }
-//     return [];
-//   }
-
-//   putCard(id){
-//     let card = this.getCard();
-//     let pushCard = false;
-//     const index = card.indexOf(id);
-
-//     if(index === -1){
-//       card.push(id);
-//       pushCard = true;
-//     } else{
-//       card.splice(index, 1);
-//     }
-
-//     localStorage.setItem(this.keyName, JSON.stringify(card));
-//     return { pushCard, card };
-//   }
-// }
-
-// const localStorageCard = new LocalStorageCard();
-
